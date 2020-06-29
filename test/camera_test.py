@@ -4,7 +4,7 @@ import sys
 
 # create VideoCapture object and return it
 def openCamera():
-    return cv2.VideoCapture("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int)1280, height=(int)720, format=(string)NV12, framerate=(fraction)30/1 ! nvvidconv ! video/x-raw, width=(int)1280, height=(int)720, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink")
+    return cv2.VideoCapture("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int)640, height=(int)480, format=(string)NV12, framerate=(fraction)30/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink")
 
 
 def readFromCamera(vidCapObj):
@@ -23,7 +23,7 @@ def readFromCamera(vidCapObj):
         print("STARTING TENSORFLOW SESSION")
         objDetector.startSession()
         while cv2.getWindowProperty(windowName, 0) >= 0: # if window isn't closed by user
-            
+            print('in while loop') 
             # read() returns bool (1: success, 0: fail) and frame
             ret, frame = vidCapObj.read()
             
@@ -37,18 +37,29 @@ def readFromCamera(vidCapObj):
             boxes, scores, classes, num = objDetector.run(frame_formatted)
             
             # draw resulting boxes and classes on frame itself
-            
+            #print(boxes)
+            #print(scores)
+            #print(classes)
+            #print(classes)
+            print('drawing')
+
+            vis.draw_all_boxes_on_images(
+                    image=frame,
+                    boxes=np.atleast_2d(np.squeeze(boxes)),
+                    classes=np.atleast_1d(np.squeeze(classes).astype(np.int32)),
+                    scores=np.atleast_1d(np.squeeze(scores)))
+            '''
             vis.draw_bounding_box_on_image(
                     image=frame,
-                    ymin=boxes[0][0][0],
-                    xmin=boxes[0][0][1],
-                    ymax=boxes[0][0][2],
-                    xmax=boxes[0][0][3],
+                    ymin=0.27087304,
+                    xmin=0.4052909,
+                    ymax=0.99364685,
+                    xmax=0.9999351,
                     color='red',
                     thickness=4,
-                    display_str_list=['apple'],
-                    use_normalized_coordinated=True)
-            
+                    display_str_list=['sample'],
+                    use_normalized_coordinates=True)
+            '''
             # display frame in specified window
             cv2.imshow(windowName, frame)
 
