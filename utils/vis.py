@@ -23,13 +23,27 @@ def draw_all_boxes_on_images(
     print('boxes')
     print(boxes)
     
+    box_coord_list = []
     for i in range(5):
         if scores[i] > threshold:
             print("Detected object with score ", scores[i])
             box = tuple(boxes[i].tolist())
             print('Box coordinates', box)
-                    
-            
+            box_coord_list.append(box)
+
+    for box in box_coord_list:
+        print('Overlaying Box on Image')
+        draw_bounding_box_on_image(
+                image=image,
+                ymin=box[0],
+                xmin=box[1],
+                ymax=box[2],
+                xmax=box[3],
+                color='red',
+                thickness=4,
+                display_str_list=['sample'],
+                use_normalized_coordinates=True)
+    
 # receives an image in __ format along with box coordinates returned from net
 def draw_bounding_box_on_image(image,
                                ymin,
