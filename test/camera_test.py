@@ -37,10 +37,7 @@ def readFromCamera(vidCapObj):
             boxes, scores, classes, num = objDetector.run(frame_formatted)
             
             # draw resulting boxes and classes on frame itself
-            #print(boxes)
-            #print(scores)
-            #print(classes)
-            #print(classes)
+           
             print('drawing')
 
             vis.draw_all_boxes_on_images(
@@ -48,18 +45,7 @@ def readFromCamera(vidCapObj):
                     boxes=np.atleast_2d(np.squeeze(boxes)),
                     classes=np.atleast_1d(np.squeeze(classes).astype(np.int32)),
                     scores=np.atleast_1d(np.squeeze(scores)))
-            '''
-            vis.draw_bounding_box_on_image(
-                    image=frame,
-                    ymin=0.27087304,
-                    xmin=0.4052909,
-                    ymax=0.99364685,
-                    xmax=0.9999351,
-                    color='red',
-                    thickness=4,
-                    display_str_list=['sample'],
-                    use_normalized_coordinates=True)
-            '''
+            
             # display frame in specified window
             cv2.imshow(windowName, frame)
 
