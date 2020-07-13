@@ -4,7 +4,7 @@ import sys
 import math
 import qwiic_scmd
 
-motor = qwiic_scmd.QwiicScmd()
+myMotor = qwiic_scmd.QwiicScmd()
 
 def run_motor_test():
     print("Start: ")
@@ -12,9 +12,9 @@ def run_motor_test():
     motor_right = 1
     forward = 0
     backward = 1
-
-    if not myMotor.connected:
-        print("Motor driver not connected!"), file=sys.stderr)
+    #print(dir(myMotor))
+    if not myMotor.is_connected():
+        print("Motor driver not connected!", file=sys.stderr)
     else:
         print("Motor driver connection establedished.")
 
