@@ -41,19 +41,48 @@ def run_motor_test():
 	time.sleep(1)
 
 	logger.info('Start test')
-
-	speed = 20
-	for speed in range(20,255):
+  #logger.info('Left Motor test, forward direction')
+	for speed in range(80,255):
 		print(speed)
-		myMotor.set_drive(motor_right, forward, speed)
+		myMotor.set_drive(motor_left, forward, speed)
+		time.sleep(.05)
+	for speed in range(254,20,-1):
+		print(speed)
+		myMotor.set_drive(motor_left, forward, speed)
+		time.sleep(.05)
+  
+	#logger.info('Left Motor test, backward direction')
+	for speed in range(80,255):
+		print(speed)
 		myMotor.set_drive(motor_left, backward, speed)
 		time.sleep(.05)
 	for speed in range(254,20,-1):
 		print(speed)
-		myMotor.set_drive(motor_right, forward, speed)
 		myMotor.set_drive(motor_left, backward, speed)
 		time.sleep(.05)
+
+
+	logger.info('Right Motor test, forward direction')
+	for speed in range(80,255):
+		print(speed)
+		myMotor.set_drive(motor_right, forward, speed)
+		time.sleep(.05)
+	for speed in range(254,20,-1):
+		print(speed)
+		myMotor.set_drive(motor_right, forward, speed)
+		time.sleep(.05)
 	
+	#logger.info('Right Motor test, backward direction')
+	for speed in range(80,255):
+		print(speed)
+		myMotor.set_drive(motor_right, backward, speed)
+		time.sleep(.05)
+	for speed in range(254,20,-1):
+		print(speed)
+		myMotor.set_drive(motor_right, backward, speed)
+		time.sleep(.05)
+
+
 	myMotor.set_drive(0,0,0)
 	myMotor.set_drive(1,0,0)
 
