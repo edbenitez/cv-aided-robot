@@ -15,7 +15,7 @@ class Camera():
 		
 
 	def _gst_str(self):
-		return "nvarguscamerasrc ! video/x    -raw(memory:NVMM), width=(int)640, height=(int)480, for    mat=(string)NV12, framerate=(fraction)30/1 ! nvvidconv     ! video/x-raw, format=(string)BGRx ! videoconvert ! vid    eo/x-raw, format=(string)BGR ! appsink"
+		return "nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int)640, height=(int)480, format=(string)NV12, framerate=(fraction)30/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink"
 
 	def begin(self):
 		logger.info('Start camera. Open Video Capture object')
