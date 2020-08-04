@@ -3,7 +3,7 @@ from traitlets import HasTraits,Instance
 from gps import gps_data
 from time import sleep
 from log_setup import logger
-
+from mag import Mag
 
 class Robot(HasTraits):
 	motor_l = Instance(Motor)
@@ -13,7 +13,8 @@ class Robot(HasTraits):
 		self.motor_l = Motor(side = 0) 
 		self.motor_r = Motor(side = 1)
 		self.gps = gps_data.GPS()
-		
+		self.mag = Mag()		
+
 	def fwd(self, value=60):
 		self.motor_l.speed = value
 		self.motor_r.speed = value
@@ -32,12 +33,12 @@ class Robot(HasTraits):
 
 	def left_turn(self, value=120):
 		self.left(value)
-		sleep(10)
+		sleep(0.1)
 		self.stop()
 		
 	def right_turn(self, value=120):
 		self.right(value)
-		sleep(10)
+		sleep(0.1)
 		self.stop()
 		
 	def stop(self):
@@ -48,15 +49,20 @@ class Robot(HasTraits):
 	def go_to_chkpt(self, chkpt):
 		while True:
 			current_loc = self.gps.parse_data()
-			if not current_loc:
+			if current_loc == (None,None):
 				logger.info('GPS: waiting to establish current location fix')
 				continue			
 			else:
-				distance_to_chkpt = self.gps.distance(current_loc, chkpt)
+				logger.info('Current coordinates (%f, %f)' % current_loc)
+				distance_to_chkpt = self.gps.distance(current_loc, chkpt).km
 				direction_to_chkpt = self.gps.direction(current_loc, chkpt)
-				#heading = self.mag.heading
-				heading = None			
-				if distance_to_chkpt == 0:
+				heading = self.mag.heading()
+				
+				logger.info('Distance to checkpoint: %f' % distance_to_chkpt)
+				logger.info('Desired heading: %f' % direction_to_chkpt)
+				logger.info('Actual heading: %f' % heading)
+	
+				if distance_to_chkpt <= 0.01:
 					self.stop()
 					logger.info('ROBOT: arrived at checkpoint')
 					break
@@ -76,16 +82,13 @@ class Robot(HasTraits):
 if __name__ == "__main__":
 	robo = Robot()
 	try:
+		test_coord = (41.47713, -87.48371399999999)
 		robo.stop()
-		logger.info('ROBOT: left turn')
-		robo.left_turn()
-		logger.info('ROBOT: right turn')
-		robo.right_turn()
+		robo.go_to_chkpt(test_coord)
 	except(KeyboardInterrupt, SystemExit, AttributeError) as exErr:
 		print("Ending test.")
 		print(exErr)
 		robo.stop()
 
 
-		robo.stop()
 		
